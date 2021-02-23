@@ -129,6 +129,7 @@ int highest_match(struct term *terms, int nterms, char *substr){
     }
     return -1;
 }*/
+//blah
 void read_in_terms(struct term **terms, int *pnterms, char *filename)
 {
     FILE *fp = fopen(filename, "r");
