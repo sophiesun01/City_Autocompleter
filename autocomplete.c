@@ -125,4 +125,21 @@ int lowest_match(struct term *terms, int nterms, char *substr){
     
     return 0;
 }
+
+int comparweight(const void *pa, const void *pb){
+    const struct term *p1 = pa;
+    const struct term *p2 = pb; 
+    return p2->weight - p1->weight;
+}
+void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr){
+    int low = lowest_match(terms, nterms, substr);
+    int high = highest_match(terms, nterms, substr);
+    *n_answer = (high - low)+1;
+    *answer = (struct term*)malloc(sizeof(struct term)*(*n_answer));
+    int e = 0;
+    memcpy((*answer), &((terms)[low]), sizeof(struct term)*(*n_answer));
+
+
+    qsort(*answer, *n_answer, sizeof(struct term), comparweight);
+}
 //autocomplete 0 not 1
