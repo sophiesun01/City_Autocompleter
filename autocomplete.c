@@ -11,6 +11,16 @@ int comparterms(const void *pa, const void *pb){
     return strcmp(p1->term, p2->term);
 }
 
+int line_counter(char *filename){
+    FILE *fp = fopen(filename, "r");
+    char line[200];
+    int count = 0;
+    while ( fgets(line, sizeof(line), fp) != NULL){
+        count ++;
+    }
+    return count;
+}
+
 void read_in_terms(struct term **terms, int *pnterms, char *filename)
 {
     FILE *fp = fopen(filename, "r");
@@ -53,8 +63,47 @@ int highest_match(struct term *terms, int nterms, char *substr){
             if(strncmp(substr, (terms)[high].term, sub_len) == 0){
                 return high;
             }
-            else if(strncmp(substr, (terms)[low+1].term, sub_len) ==0){
+            else if(strncmp(substr, (terms)[mid+1].term, sub_len) ==0){
                 low ++;
+            }
+            else{
+                return mid;
+            }
+        }
+        else if(strncmp(substr, (terms)[mid].term, sub_len) < 0){
+
+            high = mid - 1;
+        }
+        else if(strncmp(substr, (terms)[mid].term, sub_len) > 0){
+            low = mid + 1;
+            //strncmp is positive when first str has a higher ASCII index then the second str
+            //higher ASCII Index means it is lower alphabetically
+            //therefore you should be searching in the upper half 
+        }
+    }
+
+    if (strncmp(substr, (terms)[high].term, sub_len)==0){
+        return high;
+    }
+    else if (strncmp(substr, (terms)[low].term, sub_len)==0){
+        return low;
+    }
+    return -1;
+}
+
+int lowest_match(struct term *terms, int nterms, char *substr){
+    int low = 0;
+    int high = nterms-1;
+    int sub_len = strlen(substr);
+    while((high - low) >= 2){
+        int mid = (low + high) /2;
+
+        if(strncmp(substr, (terms)[mid].term, sub_len) == 0){
+            if(strncmp(substr, (terms)[low].term, sub_len) == 0){
+                return low;
+            }
+            else if(strncmp(substr, (terms)[mid-1].term, sub_len) ==0){
+                high --;
             }
             else{
                 return mid;
@@ -70,37 +119,10 @@ int highest_match(struct term *terms, int nterms, char *substr){
     if (strncmp(substr, (terms)[low].term, sub_len)==0){
         return low;
     }
-    return 0;
-}
-
-int lowest_match(struct term *terms, int nterms, char *substr){
-    int low = 0;
-    int high = nterms-1;
-    int sub_len = strlen(substr);
-    while((high - low) >= 2){
-        int mid = (low + high) /2;
-
-        if(strncmp(substr, (terms)[mid].term, sub_len) == 0){
-            if(strncmp(substr, (terms)[low].term, sub_len) == 0){
-                return low;
-            }
-            else if(strncmp(substr, (terms)[high-1].term, sub_len) ==0){
-                high --;
-            }
-            else{
-                return mid;
-            }
-        }
-        else if(strncmp(substr, (terms)[mid].term, sub_len) < 0){
-            high = mid - 1;
-        }
-        else if(strncmp(substr, (terms)[mid].term, sub_len) > 0){
-            low = mid + 1;
-        }
-    }
-    if (strncmp(substr, (terms)[high].term, sub_len)==0){
+    else if (strncmp(substr, (terms)[high].term, sub_len)==0){
         return high;
     }
+    
     return 0;
 }
 //autocomplete 0 not 1

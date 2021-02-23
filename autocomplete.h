@@ -10,5 +10,6 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename);
 int lowest_match(struct term *terms, int nterms, char *substr);
 int highest_match(struct term *terms, int nterms, char *substr);
 void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr);
-
+//delete this later
+int line_counter(char *filename);
 #endif
