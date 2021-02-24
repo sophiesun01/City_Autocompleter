@@ -34,7 +34,7 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename)
 
     fscanf(fp, "%d", pnterms);
     int count = *pnterms;
-    printf("%d\n", *pnterms);
+    //printf("%d\n", *pnterms);
     //struct term arr_term[count];
     *terms = (struct term*)malloc(sizeof(struct term) * count);
     for(int i = 0; i < count; i++){
@@ -45,10 +45,6 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename)
         //printf("%s\n", (*terms)[i].term); 
         }
     qsort(*terms, *pnterms, sizeof(struct term), comparterms);
-    for(int a = 0; a<count; a++){
-        printf("%f\n", (*terms)[a].weight);
-        printf("%s\n", (*terms)[a].term); 
-    }
     fclose(fp);
 }
 
@@ -138,8 +134,6 @@ void autocomplete(struct term **answer, int *n_answer, struct term *terms, int n
     *answer = (struct term*)malloc(sizeof(struct term)*(*n_answer));
     int e = 0;
     memcpy((*answer), &((terms)[low]), sizeof(struct term)*(*n_answer));
-
-
     qsort(*answer, *n_answer, sizeof(struct term), comparweight);
 }
 //autocomplete 0 not 1
