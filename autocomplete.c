@@ -15,7 +15,7 @@ int line_counter(char *filename){
     FILE *fp = fopen(filename, "r");
     char line[200];
     int count = 0;
-    while ( fgets(line, sizeof(line), fp) != NULL){
+    while (fgets(line, sizeof(line), fp) != NULL){
         count ++;
     }
     return count;
@@ -40,7 +40,10 @@ void read_in_terms(struct term **terms, int *pnterms, char *filename)
     for(int i = 0; i < count; i++){
         fscanf(fp, "%lf", &((*terms)[i].weight));
         fgetc(fp);
-        fscanf(fp, "%200[^\n]\n", (*terms)[i].term);
+        fscanf(fp, "%200[^\n]", (*terms)[i].term);
+        //%[^\n] reads until a newline
+        //%[*][width][length]specifier
+        //%*s means width of the field?, allocated space for the string
         //printf("%f\n", (*terms)[i].weight);
         //printf("%s\n", (*terms)[i].term); 
         }
@@ -72,6 +75,7 @@ int highest_match(struct term *terms, int nterms, char *substr){
         }
         else if(strncmp(substr, (terms)[mid].term, sub_len) > 0){
             low = mid + 1;
+            //take substr - (terms)[mid].term
             //strncmp is positive when first str has a higher ASCII index then the second str
             //higher ASCII Index means it is lower alphabetically
             //therefore you should be searching in the upper half 
@@ -123,9 +127,15 @@ int lowest_match(struct term *terms, int nterms, char *substr){
 }
 
 int comparweight(const void *pa, const void *pb){
-    const struct term *p1 = pa;
-    const struct term *p2 = pb; 
-    return p2->weight - p1->weight;
+    struct term *p1 = (struct term *)pa;
+    struct term *p2 = (struct term *)pb;
+    if (p1->weight > p2->weight){
+        return -1;
+    }
+    else if (p1->weight < p2->weight){
+        return 1;
+    }
+    return 0;
 }
 void autocomplete(struct term **answer, int *n_answer, struct term *terms, int nterms, char *substr){
     int low = lowest_match(terms, nterms, substr);
