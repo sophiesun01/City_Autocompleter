@@ -16,11 +16,11 @@ int main(void)
     //     printf("%f\n", (terms)[b].weight);
     //     printf("%s\n", (terms)[b].term); 
     // }
-    int high = highest_match(terms, nterms, "Kaifeng, C");
-    printf("%d\n", high);
-    int low = lowest_match(terms, nterms, "Kaifeng, C");
-    printf("%d\n", low);
-    autocomplete(&answer, &n_answer, terms, nterms, "Kaifeng, C" );
+    // int high = highest_match(terms, nterms, "Kaifeng, C");
+    // printf("%d\n", high);
+    // int low = lowest_match(terms, nterms, "Kaifeng, C");
+    // printf("%d\n", low);
+    autocomplete(&answer, &n_answer, terms, nterms, "Toro");
     for(int a = 0; a< n_answer; a++){
         printf("%f\n", (answer)[a].weight);
         printf("%s\n", (answer)[a].term); 
